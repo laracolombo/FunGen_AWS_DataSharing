@@ -1,34 +1,49 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>HiC Folder</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      text-align: center;
-      margin: 50px;
-    }
-    h1 {
-      color: #4CAF50;
-    }
-    a {
-      text-decoration: none;
-      color: white;
-      background-color: #4CAF50;
-      padding: 10px 20px;
-      border-radius: 5px;
-      font-size: 16px;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HiC Folder</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 50px;
+        }
+        h1 {
+            color: #4CAF50;
+        }
+        button {
+            text-decoration: none;
+            color: white;
+            background-color: #4CAF50;
+            padding: 10px 20px;
+            border-radius: 5px;
+            font-size: 16px;
+            border: none;
+            cursor: pointer;
+        }
+    </style>
+    <script>
+        async function fetchPresignedUrl() {
+            try {
+                const response = await fetch('/generate-presigned-url?file_name=Prova_Lara_ScriptGeneration.txt');
+                if (response.ok) {
+                    const presignedUrl = await response.text(); // The backend redirects, so this gives the final URL
+                    window.location.href = presignedUrl; // Redirect to the pre-signed URL
+                } else {
+                    alert('Failed to generate download link');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('An error occurred while generating the download link.');
+            }
+        }
+    </script>
 </head>
 <body>
-  <h1>PBMC Data</h1>
-  <p>Click the link below to download the file:</p>
-  <!-- Link to generate the file -->
-  <a href="https://hic.s3.starlake.ugent.be/DNA069075.hic?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIA1F3F3AD47957EB1C/20250121/us-east-1/s3/aws4_request&X-Amz-Date=20250121T105528Z&X-Amz-Expires=3600&X-Amz-SignedHeaders=host&X-Amz-Signature=540cadeba281dff68a2cc62cb3f3e705041d17779e6daba054e5802e22208ebf" target="_blank">
-    Download PBMC File
-  </a>
+    <h1>PBMC Data</h1>
+    <p>Click the button below to download the file:</p>
+    <button onclick="fetchPresignedUrl()">Download PBMC File</button>
 </body>
 </html>
