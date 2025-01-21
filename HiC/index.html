@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HiC Folder</title>
+    <title>PBMC Data</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -25,17 +25,21 @@
         }
     </style>
     <script>
-        async function fetchPresignedUrl() {
+        async function fetchAndRedirectToPresignedUrl(fileName) {
             try {
-                const response = await fetch('/generate-presigned-url?file_name=Prova_Lara_ScriptGeneration.txt');
+                // Make a request to the backend to generate the pre-signed URL
+                const response = await fetch(`/generate-presigned-url?file_name=${fileName}`);
+
                 if (response.ok) {
-                    const presignedUrl = await response.text(); // The backend redirects, so this gives the final URL
-                    window.location.href = presignedUrl; // Redirect to the pre-signed URL
+                    const presignedUrl = await response.text(); // Redirect URL is returned
+                    window.location.href = presignedUrl; // Redirect to the URL for download
                 } else {
-                    alert('Failed to generate download link');
+                    // Handle errors gracefully
+                    const error = await response.json();
+                    alert(`Failed to generate download link: ${error.error}`);
                 }
-            } catch (error) {
-                console.error('Error:', error);
+            } catch (err) {
+                console.error('Error:', err);
                 alert('An error occurred while generating the download link.');
             }
         }
@@ -44,6 +48,6 @@
 <body>
     <h1>PBMC Data</h1>
     <p>Click the button below to download the file:</p>
-    <button onclick="fetchPresignedUrl()">Download PBMC File</button>
+    <button onclick="fetchAndRedirectToPresignedUrl('Prova_Lara_ScriptGeneration.txt')">Download PBMC File</button>
 </body>
 </html>
